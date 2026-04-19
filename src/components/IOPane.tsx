@@ -81,7 +81,7 @@ export default function IOPane({
         spellCheck={false}
         autoComplete="off"
         autoCorrect="off"
-        autoCapitalize="off"
+        autoCapitalize="none"
       />
 
       {/* ── Footer stats */}
