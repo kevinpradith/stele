@@ -98,3 +98,34 @@ describe('Morse', () => {
     expect(C.morseToText(compact)).toBe('A B');
   });
 });
+
+describe('URL Encoding', () => {
+  it('round-trips', () => {
+    const a = 'Hello World &?';
+    expect(C.urlDecode(C.urlEncode(a))).toBe(a);
+  });
+  it('rejects invalid encoding', () => {
+    expect(C.urlDecode('%2')).toBe('Invalid URL Encoding');
+  });
+});
+
+describe('A1Z26', () => {
+  it('round-trips', () => {
+    const plain = 'HELLO WORLD';
+    const enc = C.a1z26Encrypt(plain);
+    expect(C.a1z26Decrypt(enc)).toBe(plain);
+  });
+  it('ignores non-alphas and handles whitespace', () => {
+    expect(C.a1z26Encrypt('Ab! c')).toBe('1-2 3');
+  });
+  it('rejects invalid input', () => {
+    expect(C.a1z26Decrypt('27')).toBe('Invalid A1Z26 Input');
+    expect(C.a1z26Decrypt('a')).toBe('Invalid A1Z26 Input');
+  });
+});
+
+describe('Reverse', () => {
+  it('is self-inverse', () => {
+    expect(C.reverseText(C.reverseText('Hello ! 12'))).toBe('Hello ! 12');
+  });
+});

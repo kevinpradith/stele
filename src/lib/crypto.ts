@@ -178,3 +178,51 @@ export function morseToText(morse: string): string {
     )
     .join(' ');
 }
+
+// ─── URL Encoding ────────────────────────────────────────────
+export function urlEncode(text: string): string {
+  return encodeURIComponent(text);
+}
+export function urlDecode(text: string): string {
+  try {
+    return decodeURIComponent(text);
+  } catch {
+    return 'Invalid URL Encoding';
+  }
+}
+
+// ─── A1Z26 Cipher ────────────────────────────────────────────
+export function a1z26Encrypt(text: string): string {
+  return text
+    .toUpperCase()
+    .replace(/[^A-Z ]/g, '')
+    .split(/\s+/)
+    .map(word => Array.from(word).map(c => c.charCodeAt(0) - 64).join('-'))
+    .join(' ');
+}
+export function a1z26Decrypt(text: string): string {
+  try {
+    const compact = text.trim();
+    if (!compact) return '';
+    return compact
+      .split(/\s+/)
+      .map(word => 
+        word.split('-')
+          .filter(n => n.trim() !== '')
+          .map(n => {
+            const num = parseInt(n, 10);
+            if (num < 1 || num > 26 || isNaN(num)) throw new Error();
+            return String.fromCharCode(num + 64);
+          })
+          .join('')
+      )
+      .join(' ');
+  } catch {
+    return 'Invalid A1Z26 Input';
+  }
+}
+
+// ─── Reverse ─────────────────────────────────────────────────
+export function reverseText(text: string): string {
+  return Array.from(text).reverse().join('');
+}

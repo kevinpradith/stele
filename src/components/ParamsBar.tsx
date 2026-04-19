@@ -55,7 +55,7 @@ export default function ParamsBar({
             <button
               className="io-action"
               onClick={() => onKeyChange('')}
-              disabled={!keyValue}
+              disabled={!keyValue || undefined}
               aria-label="Clear key"
               type="button"
             >

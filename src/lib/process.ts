@@ -47,6 +47,15 @@ export function process(
       case 'morse':
         return mode === 'encrypt' ? C.textToMorse(input) : C.morseToText(input);
 
+      case 'url':
+        return mode === 'encrypt' ? C.urlEncode(input) : C.urlDecode(input);
+
+      case 'a1z26':
+        return mode === 'encrypt' ? C.a1z26Encrypt(input) : C.a1z26Decrypt(input);
+
+      case 'reverse':
+        return C.reverseText(input);
+
       default: {
         // Exhaustiveness check — TypeScript will error here if a CipherId is unhandled
         const _never: never = id;

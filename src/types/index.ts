@@ -8,7 +8,10 @@ export type CipherId =
   | 'base64'
   | 'hex'
   | 'binary'
-  | 'morse';
+  | 'morse'
+  | 'url'
+  | 'a1z26'
+  | 'reverse';
 
 export type Category = 'Classical' | 'Encoding';
 

@@ -62,6 +62,25 @@ export const CIPHERS: ReadonlyArray<CipherDef> = [
     category: 'Encoding',
     description: 'International Morse Code. Letters separated by spaces, words by " / ".',
   },
+  {
+    id: 'a1z26',
+    label: 'A1Z26',
+    category: 'Classical',
+    description: 'A simple substitution replacing each letter with its 1-26 alphabetical position.',
+  },
+  {
+    id: 'reverse',
+    label: 'Reverse',
+    category: 'Classical',
+    description: 'Reverses the entire string. Applying it twice returns the original.',
+    symmetric: true,
+  },
+  {
+    id: 'url',
+    label: 'URL Encode',
+    category: 'Encoding',
+    description: 'Encodes text into a valid HTTP URL format by escaping special characters.',
+  },
 ] as const;
 
 export const CATEGORIES: ReadonlyArray<Category> = ['Classical', 'Encoding'];
