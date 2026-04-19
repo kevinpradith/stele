@@ -27,12 +27,6 @@ export default function Titlebar({ cipher, mode }: TitlebarProps) {
 
       <div className="titlebar-right">
         <ThemeToggle />
-        <div
-          className={`titlebar-badge${mode === 'encrypt' ? ' is-enc' : ''}`}
-          aria-label={`Mode: ${mode === 'encrypt' ? 'Encrypt' : 'Decrypt'}`}
-        >
-          {mode === 'encrypt' ? 'ENC' : 'DEC'}
-        </div>
       </div>
     </header>
   );

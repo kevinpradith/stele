@@ -48,9 +48,20 @@ export default function ParamsBar({
 
       {cipher.needsKey && (
         <div className="param-field">
-          <label className="param-label" htmlFor="param-key">
-            Key
-          </label>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <label className="param-label" htmlFor="param-key">
+              Key
+            </label>
+            <button
+              className="io-action"
+              onClick={() => onKeyChange('')}
+              disabled={!keyValue}
+              aria-label="Clear key"
+              type="button"
+            >
+              Clear
+            </button>
+          </div>
           <input
             id="param-key"
             type="text"
