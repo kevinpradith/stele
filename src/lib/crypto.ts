@@ -1,7 +1,12 @@
-// A simplified symmetric cipher tailored for easy explanation.
-// It uses a basic XOR operation with the master key, followed by Base64 encoding,
-// and finally maps the output directly to Ancient Runes.
-
+/**
+ * Stelegraphy - Core Cryptographic Mechanism
+ * 
+ * This module defines the custom Stelegraphy cipher. It utilizes a deterministic 
+ * 3-phase transformation process:
+ * 1. XOR Masking: The plaintext is scrambled using the provided Master Key.
+ * 2. Base64 Normalization: The scrambled bytes are stabilized into a predictable 64-character set.
+ * 3. Runic Translation: The Base64 output is mapped deterministically into visual Ancient Runes.
+ */
 const B64_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 const RUNE_CHARS = "ᚠᚡᚢᚣᚤᚥᚦᚧᚨᚩᚪᚫᚬᚭᚮᚯᚰᚱᚲᚳᚴᚵᚶᚷᚸᚹᚺᚻᚼᚽᚾᚿᛀᛁᛂᛃᛄᛅᛆᛇᛈᛉᛊᛋᛌᛍᛎᛏᛐᛑᛒᛓᛔᛕᛖᛗᛘᛙᛚᛛᛜᛝᛞᛟ";
 
@@ -29,42 +34,52 @@ class Stelegraphy {
   }
 
   encrypt(plaintext: string): string {
-    // 1. Encode text ke bytes yang aman (UTF-8)
+    // Phase 1: Serialization
+    // Convert plaintext into URI-safe UTF-8 format to safely handle emojis and special characters.
     const encodedStr = encodeURIComponent(plaintext);
 
-    // 2. Terapkan XOR (Pencampuran pesan dengan password)
+    // Phase 2: XOR Masking
+    // Perform a bitwise Exclusive-OR (XOR) operation sequentially matching each character of 
+    // the serialized string against the cyclic Master Key.
     const xored = Array.from(encodedStr).map((char, i) => {
       const charCode = char.charCodeAt(0);
       const keyChar = this.key.charCodeAt(i % this.key.length);
       return String.fromCharCode(charCode ^ keyChar);
     }).join('');
     
-    // 3. Ubah ke Base64 agar formatnya konsisten
+    // Phase 3: Base64 Normalization
+    // Encode the randomized XOR bytes into standard Base64 to restrict the output to 64 known characters.
     const b64 = btoa(xored);
 
-    // 4. Terjemahkan Base64 menjadi karakter Prasasti (Ancient Runes)
+    // Phase 4: Runic Translation
+    // Map the standard Base64 characters to their visually aesthetic Ancient Runic equivalents.
     return b64ToRunes(b64);
   }
 
   decrypt(runesStr: string): string {
     try {
-      // 1. Kembalikan Ancient Runes ke bentuk Base64
+      // Phase 1: Base64 Reversion
+      // Revert the visually aesthetic Ancient Runes back into standard Base64 string data.
       const b64 = runesToB64(runesStr);
 
-      // 2. Decode Base64 menjadi string ter-XOR
+      // Phase 2: Base64 Decoding
+      // Decode the Base64 format back into the raw XOR-scrambled bytes.
       const xored = atob(b64);
 
-      // 3. Bongkar XOR dengan kunci password yang sama
+      // Phase 3: XOR Unmasking
+      // Run the exact same XOR operation using the exact same Master Key.
+      // Since XOR is symmetric (A ^ B ^ B = A), this reverts the text back to URI-encoded state.
       const decodedStr = Array.from(xored).map((char, i) => {
         const charCode = char.charCodeAt(0);
         const keyChar = this.key.charCodeAt(i % this.key.length);
         return String.fromCharCode(charCode ^ keyChar);
       }).join('');
       
-      // 4. Decode aman kembali ke pesanan asli
+      // Phase 4: Deserialization
+      // Safely decode the URI string back into the original human-readable plaintext.
       return decodeURIComponent(decodedStr);
     } catch {
-      throw new Error("Teks sandi Runes rusak atau salah password");
+      throw new Error("Invalid Runic ciphertext or incorrect Master Key.");
     }
   }
 }

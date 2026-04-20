@@ -12,6 +12,11 @@
   padding: 0;
 }
 
+::selection {
+  background-color: var(--text-2);
+  color: var(--bg);
+}
+
 button {
   cursor: pointer;
   border: none;
@@ -123,8 +128,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition:
-    background-color 400ms var(--ease-out),
-    color 400ms var(--ease-out);
+    background-color 250ms var(--ease-out),
+    color 250ms var(--ease-out);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -140,7 +145,8 @@ body {
 
 :focus-visible {
   outline: 2px solid var(--focus);
-  outline-offset: 2px;
+  outline-offset: 1px;
+  border-radius: var(--r-xs);
 }
 
 .cipher-btn:focus-visible,
@@ -646,7 +652,7 @@ html[data-theme='dark'] .theme-toggle-sun {
 }
 
 .param-input:focus {
-  border-color: var(--active-bg);
+  border-color: var(--text-2);
   box-shadow: 0 0 0 3px var(--focus);
 }
 

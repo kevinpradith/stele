@@ -11,7 +11,7 @@ export function process(
   mode: Mode,
   params: ProcessParams,
 ): string {
-  const { shift, key } = params;
+  const { key } = params;
   try {
     switch (id) {
       case 'stelegraphy':
