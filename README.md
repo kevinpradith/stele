@@ -1,87 +1,51 @@
 # Stèle
 
-Stèle is a minimal, macOS-inspired cryptography and encoding application built with Next.js and TypeScript. All cryptographic operations run securely and entirely within the browser, ensuring no data collection or server-side processing is required.
+Stèle is a minimal, visually focused cryptographic application built on Next.js. It is specifically designed to demonstrate the "Stelegraphy" cipher—a custom algorithm that algorithmically translates encoded messages into highly aesthetic Ancient Runic inscriptions. 
 
-## Features
+Constructed with a premium, responsive, macOS-inspired monochrome interface, Stèle operates entirely on the client side without relying on external cryptography dependencies.
 
-The application provides a comprehensive suite of cryptographic techniques and encodings, categorized into Classical, Encoding, and Custom algorithms.
+## Architecture & Features
 
-### Supported Methods
+- **Exclusive Focus on Stelegraphy**: The application is strictly optimized for a single cryptographic operation, presenting a streamlined layout devoid of unnecessary routing.
+- **Client-Side Operations**: All encryption and decryption logic executes within the browser, ensuring messages remain inaccessible to any servers.
+- **Premium Fluid UI**: The interface utilizes strict macOS-inspired design principles, including multi-layered glassmorphism, dynamic window scaling based on viewport constraints, precision San Francisco typography fallback, and authentic spring-physics animations.
+- **Fully Responsive Layout**: Intelligent CSS grids map seamlessly from a dual-pane desktop floating window layout down to a touch-optimized swiping carousel for mobile environments.
 
-- **Classical Ciphers**: Caesar, Vigenère, ROT-13, Atbash, XOR, A1Z26, and Reverse.
-- **Encoding Formats**: Base64, Hexadecimal, Binary, Morse Code, and URL Encode.
-- **Custom Algorithms**: Stelegraphy (A proprietary symmetric block cipher combining a Substitution-Permutation Network and random Initialization Vector CBC mode).
+## The Stelegraphy Algorithm
 
-### User Interface and Experience
+Stelegraphy eschews complex matrix rotations for a highly explainable, three-phase mathematical translation that prioritizes visual impact and uniqueness.
 
-- **Client-Side Processing**: Zero server dependency for cryptographic operations.
-- **macOS-Inspired Aesthetic**: Features a monochrome graphite dark mode, glassmorphism effects, smooth micro-animations, and a custom traffic-light window control bar.
-- **Responsive Layout**: Adapts seamlessly to both desktop and mobile environments.
+1. **XOR Masking**
+The engine ingests the raw UTF-8 serialized message and performs a bitwise Exclusive-OR (XOR) operation sequentially against characters of a user-provided Master Key. This masks the original semantic meaning into randomized bytes.
 
-## Architecture and Stack
+2. **Base64 Normalization**
+The masked byte array is encoded into a standard Base64 representation. This normalization guarantees that the disorganized binary data is forced into a predictable 64-character alphanumeric domain.
 
-- **Framework**: Next.js App Router
+3. **Runic Translation**
+Each character in the resulting Base64 string is deterministically mapped one-to-one into 64 distinct Ancient Runic alphabets (Elder Futhark variants), delivering a visually compelling, presentation-ready cryptographic output.
+
+## Technology Stack
+
+- **Framework**: Next.js 15 (App Router, Turbopack enabled)
+- **Library**: React 19
 - **Language**: TypeScript
-- **Styling**: Custom CSS utilizing modern variables, responsive design patterns, and systemic design tokens
-- **Testing**: Vitest for unit testing cryptographic logic
+- **Styling**: Vanilla CSS (CSS Variables, Flexbox, Grid, Media Queries)
+- **Deployment**: Configured for Vercel
 
-## Project Structure
+## Local Development Environment
 
-```text
-src/
-├── app/
-│   ├── globals.css     # Global design system, CSS variables, and layout styles
-│   ├── layout.tsx      # Root layout, metadata configuration, and font injection
-│   └── page.tsx        # Main application entry point
-├── components/
-│   ├── CryptoApp.tsx   # Core stateful client component boundary
-│   ├── Titlebar.tsx    # macOS-style application window controls
-│   ├── Sidebar.tsx     # Algorithm selection and categorical navigation
-│   ├── ModeToggle.tsx  # Interactive encryption and decryption toggle
-│   ├── ParamsBar.tsx   # Configurable parameters (keys, cryptographic shifts)
-│   └── IOGrid.tsx      # Input and output multi-pane operational layout
-├── lib/
-│   ├── ciphers.ts      # Algorithm registry and metadata definitions
-│   ├── crypto.ts       # Core cryptographic computation logic
-│   └── process.ts      # Action dispatching layer
-└── contexts/
-    └── CipherContext.tsx # Global state management via React Context
-```
-
-## Local Development
-
-Ensure you have a recent version of Node.js installed before continuing.
-
-1. Clone the repository and navigate to the project directory.
-2. Install the necessary dependencies:
+Ensure Node.js is installed, then proceed with the standard package installation.
 
 ```bash
+# Install dependencies
 npm install
-```
 
-3. Launch the local development server:
-
-```bash
+# Run the development server with Turbopack
 npm run dev
 ```
 
-4. Open your web browser and navigate to `http://localhost:3000`.
+Navigate to `http://localhost:3000` to interact with the application.
 
-### Additional Commands
+## License
 
-- `npm run build`: Compile the application into an optimized production bundle.
-- `npm run start`: Launch the production web server.
-- `npm run lint`: Execute ESLint to analyze code formatting and styling.
-- `npm run test`: Run the Vitest unit test suite.
-
-## Deployment
-
-The application is fully optimized for Vercel deployment. 
-
-To deploy directly via the command line interface, install the Vercel CLI and execute:
-
-```bash
-npx vercel
-```
-
-Alternatively, you can link the repository to your Vercel dashboard to automate continuous integration and continuous deployment pipelines upon branch updates.
+This project is intended for educational demonstrations in custom client-side ciphers and modern interface design.
