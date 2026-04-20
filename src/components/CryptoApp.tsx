@@ -49,12 +49,7 @@ export default function CryptoApp() {
       <Titlebar cipher={cipher} mode={displayMode} />
 
       <div className="layout">
-        <Sidebar
-          ciphers={CIPHERS}
-          categories={CATEGORIES}
-          selected={selected}
-          onSelect={handleSelectCipher}
-        />
+        <Sidebar />
 
         <main className="main">
           {/* ── Panel header: title + mode toggle */}
