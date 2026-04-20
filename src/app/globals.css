@@ -577,6 +577,7 @@ html[data-theme='dark'] .theme-toggle-sun {
   color: var(--text-1);
   outline: none;
   width: 80px;
+  max-width: 100%;
   transition: border-color 400ms, box-shadow 400ms;
 }
 
@@ -772,12 +773,22 @@ html[data-theme='dark'] .theme-toggle-sun {
 
   .guide-content {
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
     gap: 16px;
+    padding-bottom: 8px; /* Room for scrollbar */
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
   }
   
+  .guide-content::-webkit-scrollbar {
+    height: 4px; /* Hide or make very thin on mobile */
+  }
+
   .guide-step {
-    flex: 1 1 200px;
+    flex: 0 0 85%;
+    scroll-snap-align: center;
   }
 
   .io-grid {
