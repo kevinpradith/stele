@@ -1,20 +1,7 @@
 // ─── Cipher IDs ──────────────────────────────────────────────
-export type CipherId =
-  | 'caesar'
-  | 'vigenere'
-  | 'rot13'
-  | 'atbash'
-  | 'xor'
-  | 'base64'
-  | 'hex'
-  | 'binary'
-  | 'morse'
-  | 'url'
-  | 'a1z26'
-  | 'reverse'
-  | 'stelegraphy';
+export type CipherId = 'stelegraphy';
 
-export type Category = 'Classical' | 'Encoding' | 'Custom';
+export type Category = 'Stelegraphy';
 
 export type Mode = 'encrypt' | 'decrypt';
 

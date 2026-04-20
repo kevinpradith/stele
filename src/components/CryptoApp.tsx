@@ -16,7 +16,7 @@ import IOGrid from './IOGrid';
  * child components inherit the client context without needing their own directive.
  */
 export default function CryptoApp() {
-  const [selected, setSelected] = useState<CipherId>('caesar');
+  const [selected, setSelected] = useState<CipherId>('stelegraphy');
   const [mode, setMode] = useState<Mode>('encrypt');
   const [input, setInput] = useState('');
   const [shift, setShift] = useState(3);
