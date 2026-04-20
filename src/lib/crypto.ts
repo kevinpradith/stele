@@ -230,6 +230,25 @@ export function reverseText(text: string): string {
 // ─── Stelegraphy (Custom Symmetric Cipher) ───────────────────
 // A synchronous block cipher tailored for browser use and demonstration.
 // Uses custom PKCS7, KDF (LCG), S-Box array mutation, and dynamic rotations.
+
+const B64_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+const RUNE_CHARS = "ᚠᚡᚢᚣᚤᚥᚦᚧᚨᚩᚪᚫᚬᚭᚮᚯᚰᚱᚲᚳᚴᚵᚶᚷᚸᚹᚺᚻᚼᚽᚾᚿᛀᛁᛂᛃᛄᛅᛆᛇᛈᛉᛊᛋᛌᛍᛎᛏᛐᛑᛒᛓᛔᛕᛖᛗᛘᛙᛚᛛᛜᛝᛞᛟ";
+
+function b64ToRunes(b64: string): string {
+  return b64.replace(/./g, char => {
+    if (char === '=') return '᛫';
+    const idx = B64_CHARS.indexOf(char);
+    return idx >= 0 ? RUNE_CHARS[idx] : char;
+  });
+}
+
+function runesToB64(runes: string): string {
+  return Array.from(runes.trim()).map(char => {
+    if (char === '᛫') return '=';
+    const idx = RUNE_CHARS.indexOf(char);
+    return idx >= 0 ? B64_CHARS[idx] : char;
+  }).join('');
+}
 class Stelegraphy {
   private masterKey: Uint8Array;
   private sbox: number[];
@@ -322,11 +341,13 @@ class Stelegraphy {
       prevBlock = new Uint8Array(block);
     }
     
-    return btoa(String.fromCharCode(...ciphertext));
+    const b64 = btoa(String.fromCharCode(...ciphertext));
+    return b64ToRunes(b64);
   }
 
-  decrypt(b64: string): string {
-    const binStr = atob(b64.trim());
+  decrypt(runesStr: string): string {
+    const b64 = runesToB64(runesStr);
+    const binStr = atob(b64);
     const data = new Uint8Array(binStr.length);
     for (let i = 0; i < binStr.length; i++) data[i] = binStr.charCodeAt(i);
     

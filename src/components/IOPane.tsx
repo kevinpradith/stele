@@ -50,7 +50,7 @@ export default function IOPane({
           <button
             className="io-action"
             onClick={() => onChange('')}
-            disabled={!value || undefined}
+            disabled={!value}
             aria-label="Clear input"
           >
             Clear
@@ -61,7 +61,7 @@ export default function IOPane({
           <button
             className={`io-action${copied ? ' is-copied' : ''}`}
             onClick={handleCopy}
-            disabled={!value || undefined}
+            disabled={!value}
             aria-label="Copy output"
           >
             {copied ? '✓ Copied' : 'Copy'}

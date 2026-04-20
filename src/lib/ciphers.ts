@@ -85,7 +85,7 @@ export const CIPHERS: ReadonlyArray<CipherDef> = [
     id: 'stelegraphy',
     label: 'Stelegraphy',
     category: 'Custom',
-    description: 'Custom symmetric block cipher combining SPN & random IV CBC mode.',
+    description: 'Custom symmetric block cipher that outputs an encrypted ciphertext in Ancient Runes.',
     needsKey: true,
     keyPlaceholder: 'Master Secret Key',
   },
