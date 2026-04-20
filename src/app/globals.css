@@ -162,7 +162,7 @@ body {
   transition: background-color 400ms var(--ease-out), box-shadow 400ms var(--ease-out), border-color 400ms var(--ease-out);
 }
 
-@media (min-width: 800px) {
+@media (min-width: 1024px) {
   html[data-theme='light'] body,
   html:not([data-theme]) body {
     background-image: 
@@ -540,6 +540,7 @@ html[data-theme='dark'] .theme-toggle-sun {
    ══════════════════════════════════════════════════════════════ */
 .params-bar {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   align-items: flex-end;
   flex-shrink: 0;
@@ -748,9 +749,9 @@ html[data-theme='dark'] .theme-toggle-sun {
 ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
 
 /* ══════════════════════════════════════════════════════════════
-   RESPONSIVE — ≤ 640 px
+   RESPONSIVE — MOBILE (≤ 767px)
    ══════════════════════════════════════════════════════════════ */
-@media (max-width: 640px) {
+@media (max-width: 767px) {
   .layout {
     flex-direction: column;
   }
