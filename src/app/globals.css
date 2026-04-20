@@ -458,6 +458,51 @@ html[data-theme='dark'] .theme-toggle-sun {
   line-height: 1.5;
 }
 
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.credit-label {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-3);
+}
+
+.credit-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.credit-link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--text-2);
+  text-decoration: none;
+  transition: color 250ms var(--ease-out);
+}
+
+.credit-link:hover {
+  color: var(--text-1);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.credit-dot {
+  font-size: 11px;
+  color: var(--text-3);
+}
+
 /* ══════════════════════════════════════════════════════════════
    MAIN CONTENT
    ══════════════════════════════════════════════════════════════ */
