@@ -227,10 +227,29 @@ export function reverseText(text: string): string {
   return Array.from(text).reverse().join('');
 }
 
-// ─── Stelegraphy (Custom Symmetric Cipher) ───────────────────
 // A simplified symmetric cipher tailored for easy explanation.
 // It uses a basic XOR operation with the master key, followed by Base64 encoding,
 // and finally maps the output directly to Ancient Runes.
+
+const B64_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+const RUNE_CHARS = "ᚠᚡᚢᚣᚤᚥᚦᚧᚨᚩᚪᚫᚬᚭᚮᚯᚰᚱᚲᚳᚴᚵᚶᚷᚸᚹᚺᚻᚼᚽᚾᚿᛀᛁᛂᛃᛄᛅᛆᛇᛈᛉᛊᛋᛌᛍᛎᛏᛐᛑᛒᛓᛔᛕᛖᛗᛘᛙᛚᛛᛜᛝᛞᛟ";
+
+function b64ToRunes(b64: string): string {
+  return b64.replace(/./g, char => {
+    if (char === '=') return '᛫';
+    const idx = B64_CHARS.indexOf(char);
+    return idx >= 0 ? RUNE_CHARS[idx] : char;
+  });
+}
+
+function runesToB64(runes: string): string {
+  return Array.from(runes.trim()).map(char => {
+    if (char === '᛫') return '=';
+    const idx = RUNE_CHARS.indexOf(char);
+    return idx >= 0 ? B64_CHARS[idx] : char;
+  }).join('');
+}
+
 class Stelegraphy {
   private key: string;
 
