@@ -228,179 +228,54 @@ export function reverseText(text: string): string {
 }
 
 // ─── Stelegraphy (Custom Symmetric Cipher) ───────────────────
-// A synchronous block cipher tailored for browser use and demonstration.
-// Uses custom PKCS7, KDF (LCG), S-Box array mutation, and dynamic rotations.
-
-const B64_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-const RUNE_CHARS = "ᚠᚡᚢᚣᚤᚥᚦᚧᚨᚩᚪᚫᚬᚭᚮᚯᚰᚱᚲᚳᚴᚵᚶᚷᚸᚹᚺᚻᚼᚽᚾᚿᛀᛁᛂᛃᛄᛅᛆᛇᛈᛉᛊᛋᛌᛍᛎᛏᛐᛑᛒᛓᛔᛕᛖᛗᛘᛙᛚᛛᛜᛝᛞᛟ";
-
-function b64ToRunes(b64: string): string {
-  return b64.replace(/./g, char => {
-    if (char === '=') return '᛫';
-    const idx = B64_CHARS.indexOf(char);
-    return idx >= 0 ? RUNE_CHARS[idx] : char;
-  });
-}
-
-function runesToB64(runes: string): string {
-  return Array.from(runes.trim()).map(char => {
-    if (char === '᛫') return '=';
-    const idx = RUNE_CHARS.indexOf(char);
-    return idx >= 0 ? B64_CHARS[idx] : char;
-  }).join('');
-}
+// A simplified symmetric cipher tailored for easy explanation.
+// It uses a basic XOR operation with the master key, followed by Base64 encoding,
+// and finally maps the output directly to Ancient Runes.
 class Stelegraphy {
-  private masterKey: Uint8Array;
-  private sbox: number[];
-  private invSbox: number[];
-  private readonly BLOCK_SIZE = 8;
+  private key: string;
 
   constructor(key: string) {
-    if (!key) key = "stele";
-    // 1. KDF: Derive 32 bytes deterministically from string key
-    this.masterKey = new Uint8Array(32);
-    let hash = 0x811c9dc5;
-    for (let i = 0; i < key.length; i++) {
-      hash ^= key.charCodeAt(i);
-      hash = Math.imul(hash, 0x01000193) >>> 0;
-    }
-    let seed = hash;
-    for (let i = 0; i < 32; i++) {
-      seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
-      this.masterKey[i] = seed & 0xff;
-    }
-
-    // 2. Dynamic S-Box Generation (RC4 KSA-style)
-    this.sbox = Array.from({ length: 256 }, (_, i) => i);
-    let j = 0;
-    for (let i = 0; i < 256; i++) {
-      j = (j + this.sbox[i] + this.masterKey[i % 32]) % 256;
-      [this.sbox[i], this.sbox[j]] = [this.sbox[j], this.sbox[i]];
-    }
-
-    // 3. Inverse S-Box
-    this.invSbox = new Array(256).fill(0);
-    for (let i = 0; i < 256; i++) {
-      this.invSbox[this.sbox[i]] = i;
-    }
-  }
-
-  private pad(data: Uint8Array): Uint8Array {
-    const padLen = this.BLOCK_SIZE - (data.length % this.BLOCK_SIZE);
-    const padded = new Uint8Array(data.length + padLen);
-    padded.set(data);
-    padded.fill(padLen, data.length);
-    return padded;
-  }
-
-  private unpad(data: Uint8Array): Uint8Array {
-    if (data.length === 0) return data;
-    const padLen = data[data.length - 1];
-    return data.slice(0, data.length - padLen);
+    this.key = key || "stele";
   }
 
   encrypt(plaintext: string): string {
-    const data = this.pad(new TextEncoder().encode(plaintext));
+    // 1. Encode text ke bytes yang aman (UTF-8)
+    const encodedStr = encodeURIComponent(plaintext);
+
+    // 2. Terapkan XOR (Pencampuran pesan dengan password)
+    const xored = Array.from(encodedStr).map((char, i) => {
+      const charCode = char.charCodeAt(0);
+      const keyChar = this.key.charCodeAt(i % this.key.length);
+      return String.fromCharCode(charCode ^ keyChar);
+    }).join('');
     
-    // 4. Random IV per encryption
-    const iv = new Uint8Array(this.BLOCK_SIZE);
-    crypto.getRandomValues(iv); // secure sync random
-    
-    const ciphertext = new Uint8Array(iv.length + data.length);
-    ciphertext.set(iv, 0);
-    
-    let prevBlock = new Uint8Array(iv);
-    
-    for (let b = 0; b < data.length; b += this.BLOCK_SIZE) {
-      const block = data.slice(b, b + this.BLOCK_SIZE);
-      
-      // 5. CBC XOR
-      for (let i = 0; i < this.BLOCK_SIZE; i++) block[i] ^= prevBlock[i];
-      
-      // 6. SPN (3 Rounds)
-      for (let round = 0; round < 3; round++) {
-        // A. SubBytes
-        for (let i = 0; i < this.BLOCK_SIZE; i++) block[i] = this.sbox[block[i]];
-        
-        // B. Dynamic Permutation (Rotate Left)
-        const sum = block.reduce((a, b) => a + b, 0);
-        const shift = sum % this.BLOCK_SIZE;
-        const rotated = new Uint8Array(this.BLOCK_SIZE);
-        rotated.set(block.slice(shift), 0);
-        rotated.set(block.slice(0, shift), this.BLOCK_SIZE - shift);
-        for(let i=0; i<this.BLOCK_SIZE; i++) block[i] = rotated[i];
-        
-        // C. Key Mixing Mask
-        for (let i = 0; i < this.BLOCK_SIZE; i++) {
-          const keyByte = this.masterKey[(b + round + i) % 32];
-          block[i] ^= keyByte;
-        }
-      }
-      
-      ciphertext.set(block, iv.length + b);
-      prevBlock = new Uint8Array(block);
-    }
-    
-    const b64 = btoa(String.fromCharCode(...ciphertext));
+    // 3. Ubah ke Base64 agar formatnya konsisten
+    const b64 = btoa(xored);
+
+    // 4. Terjemahkan Base64 menjadi karakter Prasasti (Ancient Runes)
     return b64ToRunes(b64);
   }
 
   decrypt(runesStr: string): string {
-    const b64 = runesToB64(runesStr);
-    const binStr = atob(b64);
-    const data = new Uint8Array(binStr.length);
-    for (let i = 0; i < binStr.length; i++) data[i] = binStr.charCodeAt(i);
-    
-    if (data.length < this.BLOCK_SIZE || data.length % this.BLOCK_SIZE !== 0) {
-      throw new Error("Teks sandi bukan berasal dari Stelegraphy");
+    try {
+      // 1. Kembalikan Ancient Runes ke bentuk Base64
+      const b64 = runesToB64(runesStr);
+
+      // 2. Decode Base64 menjadi string ter-XOR
+      const xored = atob(b64);
+
+      // 3. Bongkar XOR dengan kunci password yang sama
+      const decodedStr = Array.from(xored).map((char, i) => {
+        const charCode = char.charCodeAt(0);
+        const keyChar = this.key.charCodeAt(i % this.key.length);
+        return String.fromCharCode(charCode ^ keyChar);
+      }).join('');
+      
+      // 4. Decode aman kembali ke pesanan asli
+      return decodeURIComponent(decodedStr);
+    } catch {
+      throw new Error("Teks sandi Runes rusak atau salah password");
     }
-    
-    const iv = data.slice(0, this.BLOCK_SIZE);
-    const ciphertext = data.slice(this.BLOCK_SIZE);
-    const plaintext = new Uint8Array(ciphertext.length);
-    
-    let prevBlock = new Uint8Array(iv);
-    
-    for (let b = 0; b < ciphertext.length; b += this.BLOCK_SIZE) {
-      const cBlock = ciphertext.slice(b, b + this.BLOCK_SIZE);
-      const block = new Uint8Array(cBlock);
-      
-      // Reverse 3 Rounds
-      for (let round = 2; round >= 0; round--) {
-        // C. Inv Key Mixing Mask
-        for (let i = 0; i < this.BLOCK_SIZE; i++) {
-          const keyByte = this.masterKey[(b + round + i) % 32];
-          block[i] ^= keyByte;
-        }
-        
-        // B. Inv Dynamic Permutation (Rotate Right)
-        const sum = block.reduce((a, b) => a + b, 0);
-        const shift = sum % this.BLOCK_SIZE;
-        const rotated = new Uint8Array(this.BLOCK_SIZE);
-        if (shift > 0) {
-          rotated.set(block.slice(-shift), 0);
-          rotated.set(block.slice(0, -shift), shift);
-          for(let i=0; i<this.BLOCK_SIZE; i++) block[i] = rotated[i];
-        } else {
-          for(let i=0; i<this.BLOCK_SIZE; i++) block[i] = block[i]; // No-op
-        }
-        
-        // A. Inv SubBytes
-        for (let i = 0; i < this.BLOCK_SIZE; i++) {
-          block[i] = this.invSbox[block[i]];
-        }
-      }
-      
-      // Inv CBC
-      for (let i = 0; i < this.BLOCK_SIZE; i++) {
-        block[i] ^= prevBlock[i];
-      }
-      
-      plaintext.set(block, b);
-      prevBlock = cBlock;
-    }
-    
-    return new TextDecoder().decode(this.unpad(plaintext));
   }
 }
 
