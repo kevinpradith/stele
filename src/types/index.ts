@@ -11,9 +11,10 @@ export type CipherId =
   | 'morse'
   | 'url'
   | 'a1z26'
-  | 'reverse';
+  | 'reverse'
+  | 'stelegraphy';
 
-export type Category = 'Classical' | 'Encoding';
+export type Category = 'Classical' | 'Encoding' | 'Custom';
 
 export type Mode = 'encrypt' | 'decrypt';
 

@@ -56,6 +56,9 @@ export function process(
       case 'reverse':
         return C.reverseText(input);
 
+      case 'stelegraphy':
+        return mode === 'encrypt' ? C.stelegraphyEncrypt(input, key) : C.stelegraphyDecrypt(input, key);
+
       default: {
         // Exhaustiveness check — TypeScript will error here if a CipherId is unhandled
         const _never: never = id;

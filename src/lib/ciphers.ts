@@ -81,6 +81,14 @@ export const CIPHERS: ReadonlyArray<CipherDef> = [
     category: 'Encoding',
     description: 'Encodes text into a valid HTTP URL format by escaping special characters.',
   },
+  {
+    id: 'stelegraphy',
+    label: 'Stelegraphy',
+    category: 'Custom',
+    description: 'Custom symmetric block cipher combining SPN & random IV CBC mode.',
+    needsKey: true,
+    keyPlaceholder: 'Master Secret Key',
+  },
 ] as const;
 
-export const CATEGORIES: ReadonlyArray<Category> = ['Classical', 'Encoding'];
+export const CATEGORIES: ReadonlyArray<Category> = ['Classical', 'Encoding', 'Custom'];
