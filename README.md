@@ -1,6 +1,8 @@
 # Stèle
 
-Stèle is a minimal, visually focused cryptographic application built on Next.js. It is specifically designed to demonstrate the "Stelegraphy" cipher—a custom algorithm that algorithmically translates encoded messages into highly aesthetic Ancient Runic inscriptions. 
+**Live Deployment:** [https://stele-gray.vercel.app/](https://stele-gray.vercel.app/)
+
+Stèle is a minimal, visually focused cryptographic application built on Next.js. It is specifically designed to demonstrate the "Stelegraphy" cipher—a custom algorithm that algorithmically translates encoded messages into highly aesthetic Ancient Runic inscriptions.
 
 Constructed with a premium, responsive, macOS-inspired monochrome interface, Stèle operates entirely on the client side without relying on external cryptography dependencies.
 
